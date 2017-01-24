@@ -1,0 +1,56 @@
+configurations {
+	Toolset {
+		key : "PlatformToolset";
+		choices: { v140 };
+	};
+};
+
+nuget {
+	nuspec {
+		id = flann;
+		version : 1.9.1.0;
+		title: flann;
+		authors: {Marius Muja, David G. Lowe, Jack Rae};
+		owners: {rauts};
+		licenseUrl: "https://github.com/mariusmuja/flann/blob/master/COPYING";
+		projectUrl: "https://github.com/mariusmuja/flann";
+		iconUrl: "https://bytebucket.org/sgrottel_nuget/lua/raw/373952da8fa8c772af789063fdb3d7144af03960/lua/doc/logo.gif" ;
+		requireLicenseAcceptance: false;
+		summary: @"FLANN - Fast Library for Approximate Nearest Neighbors";
+		description: @"FLANN is a library for performing fast approximate nearest neighbor searches in high dimensional spaces. 
+		It contains a collection of algorithms we found to work best for nearest neighbor search and a system for automatically choosing the best algorithm and optimum parameters depending on the dataset.";
+		releaseNotes: "NuGet package for FLANN";
+		copyright: @"Copyright (c) 2008-2011  Marius Muja. All rights reserved.
+		Copyright (c) 2008-2011  David G. Lowe. All rights reserved.
+		Copyright (c) 2015 Google Inc. All Rights Reserved." ;
+		tags: { FLANN, native, CoApp };
+	};
+
+	files {
+		nestedInclude: {
+			#destination = ${d_include}\flann;
+			"src\cpp\flann\*.h";
+			"src\cpp\flann\*.hpp";
+			"src\cpp\flann\*\*.h";
+			"src\cpp\flann\*\*\*.h";
+		};
+		docs: {
+			"doc\*"
+		};
+
+		("v140", "x64", "Debug,Release") => {
+			[${0},${1},${2}] {
+				lib:     build\lib\${2}\*.lib;
+				symbols: build\lib\${2}\*.pdb;
+				bin:     build\lib\${2}\*.dll;
+			}
+		};
+	};
+
+	targets {
+		Includes += ${pkg_root}/${d_include}
+		Defines += HAS_FLANN;
+		Defines += FLANN_BUILD_AS_DLL;
+	};
+
+};
